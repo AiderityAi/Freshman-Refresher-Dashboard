@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Shiah's Freshman Math Reset</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#14142B;
+    --bg-card:#1F1F45;
+    --bg-card-2:#262655;
+    --ink:#F5F3FF;
+    --muted:#A6A2D6;
+    --mult:#FF6B5D;
+    --mult-soft:#3A2233;
+    --div:#2EC4B6;
+    --div-soft:#153A38;
+    --frac:#FFC145;
+    --frac-soft:#3A2F14;
+    --alg:#9D4EDD;
+    --alg-soft:#2A1B3D;
+    --success:#4ADE80;
+    --danger:#FF6B6B;
+    --ring-track:#2A2A55;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Nunito',sans-serif;
+    min-height:100vh;
+    padding:0 0 60px 0;
+  }
+  h1,h2,h3,.display{ font-family:'Baloo 2',sans-serif; }
+  .mono{ font-family:'Space Mono',monospace; }
+  .wrap{ max-width:920px; margin:0 auto; padding:20px 18px 0; }
+
+  /* HERO */
+  .hero{
+    display:flex; align-items:center; gap:22px; flex-wrap:wrap;
+    background:linear-gradient(135deg, #1A1A3A 0%, #201A45 60%, #24193f 100%);
+    border:1px solid #2c2c5c;
+    border-radius:24px; padding:24px; margin-top:12px;
+    position:relative; overflow:hidden;
+  }
+  .hero::after{
+    content:""; position:absolute; right:-60px; top:-60px; width:220px; height:220px;
+    background:radial-gradient(circle, rgba(157,78,221,0.25), transparent 70%);
+  }
+  .hero-text{ flex:1; min-width:220px; z-index:1;}
+  .eyebrow{
+    font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--muted);
+    font-weight:800; margin-bottom:6px;
+  }
+  .hero h1{ font-size:28px; margin:0 0 8px; line-height:1.15; }
+  .hero p{ color:var(--muted); margin:0; font-size:15px; line-height:1.5; max-width:440px;}
+  .streak-pill{
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    background:#ffffff12; padding:6px 12px; border-radius:100px; font-size:13px; font-weight:700;
+  }
+
+  /* SKILL WHEEL */
+  .wheel-box{ position:relative; width:150px; height:150px; flex-shrink:0; z-index:1;}
+  .wheel-center{
+    position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  }
+  .wheel-center .num{ font-size:26px; font-weight:800; font-family:'Space Mono',monospace;}
+  .wheel-center .lbl{ font-size:10px; color:var(--muted); letter-spacing:1px; text-transform:uppercase;}
+
+  .legend{ display:flex; gap:14px; flex-wrap:wrap; margin-top:14px; z-index:1; width:100%;}
+  .legend-item{ display:flex; align-items:center; gap:6px; font-size:12px; color:var(--muted); font-weight:700;}
+  .dot{ width:10px; height:10px; border-radius:3px; }
+
+  /* NAV CHIPS */
+  .nav-row{ display:flex; gap:8px; overflow-x:auto; padding:18px 2px 6px; scrollbar-width:thin; }
+  .chip{
+    flex-shrink:0; padding:9px 16px; border-radius:100px; background:var(--bg-card); color:var(--muted);
+    font-weight:800; font-size:13px; cursor:pointer; border:2px solid transparent; transition:.15s;
+    white-space:nowrap; display:flex; align-items:center; gap:6px;
+  }
+  .chip:hover{ background:var(--bg-card-2); }
+  .chip.active{ background:var(--ink); color:var(--bg); }
+  .chip .check{ color:var(--success); font-size:12px; }
+  .chip.dash{ border:2px solid #ffffff20; }
+
+  /* CARD */
+  .card{
+    background:var(--bg-card); border-radius:20px; padding:22px; margin-top:14px;
+    border:1px solid #ffffff10;
+  }
+  .card h2{ font-size:20px; margin:0 0 4px; }
+  .day-tag{
+    display:inline-block; font-size:11px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase;
+    padding:4px 10px; border-radius:8px; margin-bottom:10px;
+  }
+  .section-label{
+    font-size:12px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted);
+    margin:20px 0 10px; display:flex; align-items:center; gap:8px;
+  }
+  ul.lesson-list{ margin:6px 0 0; padding-left:20px; }
+  ul.lesson-list li{ margin-bottom:6px; line-height:1.5; font-size:15px;}
+  .goal-box{
+    background:#ffffff08; border-left:3px solid var(--frac); border-radius:8px; padding:12px 14px; margin-top:10px;
+    font-size:14px; color:var(--muted);
+  }
+  .goal-box b{ color:var(--ink); }
+
+  /* VIDEO BUTTONS */
+  .video-row{ display:flex; gap:10px; flex-wrap:wrap; }
+  .video-btn{
+    display:flex; align-items:center; gap:8px; text-decoration:none; color:var(--ink);
+    background:var(--bg-card-2); padding:10px 14px; border-radius:12px; font-size:13px; font-weight:700;
+    border:1px solid #ffffff10; transition:.15s;
+  }
+  .video-btn:hover{ background:#31316a; transform:translateY(-1px); }
+  .video-btn .play{
+    width:22px; height:22px; border-radius:50%; background:var(--danger); display:flex; align-items:center;
+    justify-content:center; font-size:10px; flex-shrink:0;
+  }
+
+  /* FLASHCARDS */
+  .flash-wrap{ display:flex; flex-direction:column; align-items:center; gap:12px; }
+  .flash-card{
+    width:100%; max-width:340px; height:170px; perspective:1200px; cursor:pointer;
+  }
+  .flash-inner{
+    position:relative; width:100%; height:100%; transition:transform .5s; transform-style:preserve-3d;
+  }
+  .flash-card.flipped .flash-inner{ transform:rotateY(180deg); }
+  .flash-face{
+    position:absolute; inset:0; backface-visibility:hidden; border-radius:16px;
+    display:flex; align-items:center; justify-content:center; text-align:center; padding:16px;
+    font-weight:800; font-size:22px; font-family:'Space Mono',monospace;
+  }
+  .flash-front{ background:var(--bg-card-2); border:2px solid #ffffff15; }
+  .flash-back{ transform:rotateY(180deg); background:var(--success); color:#0f2318; }
+  .flash-controls{ display:flex; gap:10px; align-items:center; }
+  .flash-progress{ font-size:12px; color:var(--muted); font-weight:700; }
+  .icon-btn{
+    background:var(--bg-card-2); border:none; color:var(--ink); width:38px; height:38px; border-radius:50%;
+    font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:.15s;
+  }
+  .icon-btn:hover{ background:#31316a; }
+  .rate-row{ display:flex; gap:8px; margin-top:4px; }
+  .rate-btn{
+    border:none; padding:8px 14px; border-radius:10px; font-weight:800; font-size:12px; cursor:pointer;
+  }
+  .rate-again{ background:var(--danger); color:#3a0d0d; }
+  .rate-good{ background:var(--success); color:#0f2318; }
+
+  /* QUIZ */
+  .q-block{ margin-bottom:16px; padding-bottom:16px; border-bottom:1px solid #ffffff0f; }
+  .q-block:last-child{ border-bottom:none; }
+  .q-text{ font-weight:800; margin-bottom:10px; font-size:15px; }
+  .opt-row{ display:flex; gap:8px; flex-wrap:wrap; }
+  .opt-btn{
+    background:var(--bg-card-2); border:2px solid transparent; color:var(--ink); padding:9px 14px;
+    border-radius:10px; cursor:pointer; font-weight:700; font-family:'Space Mono',monospace; font-size:14px;
+    transition:.15s;
+  }
+  .opt-btn:hover{ border-color:#ffffff30; }
+  .opt-btn.correct{ background:var(--success); color:#0f2318; }
+  .opt-btn.wrong{ background:var(--danger); color:#3a0d0d; }
+  .opt-btn.disabled{ pointer-events:none; opacity:.55; }
+  .quiz-score{
+    text-align:center; padding:14px; border-radius:14px; margin-top:6px; font-weight:800; font-size:15px;
+  }
+
+  /* TIMER DRILL */
+  .timer-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  .timer-display{ font-size:34px; font-weight:800; font-family:'Space Mono',monospace; }
+  .btn{
+    background:var(--alg); color:#fff; border:none; padding:11px 20px; border-radius:12px; font-weight:800;
+    cursor:pointer; font-size:14px; transition:.15s;
+  }
+  .btn:hover{ filter:brightness(1.1); transform:translateY(-1px); }
+  .btn.secondary{ background:var(--bg-card-2); color:var(--ink); }
+  .btn.success-btn{ background:var(--success); color:#0f2318; }
+  .drill-q{ font-size:30px; font-weight:800; text-align:center; margin:16px 0; font-family:'Space Mono',monospace; }
+  .drill-input{
+    width:100%; max-width:160px; display:block; margin:0 auto; text-align:center; font-size:22px;
+    padding:10px; border-radius:10px; border:2px solid #ffffff20; background:var(--bg); color:var(--ink);
+    font-family:'Space Mono',monospace; font-weight:700;
+  }
+  .drill-feedback{ text-align:center; font-weight:800; margin-top:10px; min-height:22px; }
+
+  .complete-row{ display:flex; align-items:center; justify-content:space-between; margin-top:22px; gap:10px; flex-wrap:wrap;}
+  .complete-btn{
+    background:var(--success); color:#0f2318; border:none; padding:12px 20px; border-radius:12px;
+    font-weight:800; cursor:pointer; font-size:14px; display:flex; align-items:center; gap:8px;
+  }
+  .complete-btn.done{ background:#2a2a55; color:var(--muted); }
+  .day-nav-btns{ display:flex; gap:8px; }
+
+  /* DASHBOARD */
+  .stat-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:12px; margin-top:14px;}
+  .stat-card{ background:var(--bg-card-2); border-radius:14px; padding:14px; }
+  .stat-num{ font-size:26px; font-weight:800; font-family:'Space Mono',monospace; }
+  .stat-lbl{ font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; font-weight:700; margin-top:2px;}
+  .skill-row{ margin-top:14px; }
+  .skill-name{ display:flex; justify-content:space-between; font-size:13px; font-weight:800; margin-bottom:6px;}
+  .skill-track{ height:10px; border-radius:6px; background:#ffffff10; overflow:hidden; }
+  .skill-fill{ height:100%; border-radius:6px; transition:width .6s ease; }
+
+  .footer-note{ text-align:center; color:var(--muted); font-size:12px; margin-top:30px; padding:0 20px; line-height:1.6;}
+  ::-webkit-scrollbar{ height:6px; }
+  ::-webkit-scrollbar-thumb{ background:#33336a; border-radius:6px; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; animation:none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+/* ================= DATA ================= */
+
+const SUBJECTS = {
+  mult: { name:"Multiplication", color:"var(--mult)", solid:"#FF6B5D" },
+  div:  { name:"Division", color:"var(--div)", solid:"#2EC4B6" },
+  frac: { name:"Fractions %", color:"var(--frac)", solid:"#FFC145" },
+  alg:  { name:"Algebra", color:"var(--alg)", solid:"#9D4EDD" },
+};
+
+function yt(q){ return "https://www.youtube.com/results?search_query=" + encodeURIComponent(q); }
+function khan(path){ return "https://www.khanacademy.org/search?page_search_query=" + encodeURIComponent(path); }
+
+const DAYS = [
+{
+  id:1, subject:"mult", title:"Multiplication Foundations",
+  lesson:[
+    "Master the easy anchors first: ×0, ×1, ×2, ×5, ×10 — these unlock everything else.",
+    "×0 = always 0. ×1 = the number itself. ×2 = double it.",
+    "×5 trick: multiply by 10, then cut in half.",
+    "×10 trick: just add a zero to the end."
+  ],
+  goal:"Answer these instantly: 5×8, 2×9, 10×7, 5×12",
+  videos:[ {t:"Khan Academy — Multiplication Facts", u:khan("multiplication facts")}, {t:"Math Antics — Multiplication", u:yt("Math Antics Multiplication")} ],
+  flash: [["0×6","0"],["1×9","9"],["2×7","14"],["5×8","40"],["5×6","30"],["10×7","70"],["2×12","24"],["5×12","60"],["10×9","90"],["2×8","16"]],
+  quiz:[
+    {q:"5 × 8 =", opts:["35","40","45","13"], a:"40"},
+    {q:"2 × 9 =", opts:["18","16","11","20"], a:"18"},
+    {q:"10 × 7 =", opts:["17","70","7","700"], a:"70"},
+    {q:"5 × 12 =", opts:["60","50","65","17"], a:"60"},
+    {q:"0 × 84 =", opts:["84","1","0","8"], a:"0"},
+  ]
+},
+{
+  id:2, subject:"mult", title:"×3 and ×4 Tables",
+  lesson:[
+    "×3 trick: double the number, then add one more copy of it (2x + x).",
+    "×4 trick: double it twice — that's ×2, then ×2 again.",
+    "Say the full fact out loud as you practice: “3 times 7 is 21,” not just “21.”"
+  ],
+  goal:"3×7, 4×8, 4×12, 3×11 — recall in under 3 seconds.",
+  videos:[ {t:"Khan Academy — 3 & 4 Times Tables", u:khan("multiply by 3 and 4")}, {t:"YouTube — ×4 Doubling Trick", u:yt("times 4 double twice trick")} ],
+  flash: [["3×6","18"],["3×7","21"],["3×9","27"],["3×11","33"],["4×4","16"],["4×6","24"],["4×8","32"],["4×9","36"],["4×12","48"],["3×8","24"]],
+  quiz:[
+    {q:"3 × 7 =", opts:["21","24","18","10"], a:"21"},
+    {q:"4 × 8 =", opts:["24","28","32","36"], a:"32"},
+    {q:"4 × 12 =", opts:["48","44","46","40"], a:"48"},
+    {q:"3 × 11 =", opts:["33","31","30","36"], a:"33"},
+    {q:"4 × 4 =", opts:["8","12","16","20"], a:"16"},
+  ]
+},
+{
+  id:3, subject:"mult", title:"×6 and ×8 Tables",
+  lesson:[
+    "×8 trick: double three times in a row (×2, ×2, ×2).",
+    "×6 trick: ×6 = ×5 + one more group of the number.",
+    "Notice a pattern: even × even always ends in an even number."
+  ],
+  goal:"Master: 6×7, 6×8, 8×7, 8×9",
+  videos:[ {t:"Khan Academy — 6 & 8 Times Tables", u:khan("multiply by 6 and 8")}, {t:"YouTube — ×8 Triple Double Trick", u:yt("times 8 trick double three times")} ],
+  flash: [["6×6","36"],["6×7","42"],["6×8","48"],["6×9","54"],["8×3","24"],["8×5","40"],["8×7","56"],["8×8","64"],["8×9","72"],["6×4","24"]],
+  quiz:[
+    {q:"6 × 7 =", opts:["40","42","48","36"], a:"42"},
+    {q:"6 × 8 =", opts:["48","54","42","46"], a:"48"},
+    {q:"8 × 7 =", opts:["54","56","64","58"], a:"56"},
+    {q:"8 × 9 =", opts:["63","72","81","64"], a:"72"},
+    {q:"6 × 9 =", opts:["45","54","56","63"], a:"54"},
+  ]
+},
+{
+  id:4, subject:"mult", title:"×7 and ×9 Tables (The Hard Ones)",
+  lesson:[
+    "These get memorized, not tricked — drill them daily until instant.",
+    "Key facts to lock in: 7×6=42, 7×7=49, 7×8=56, 7×9=63.",
+    "×9 finger trick: hold up 10 fingers, fold down the finger for the number you're multiplying — fingers left of the fold = tens digit, right = ones digit."
+  ],
+  goal:"Answer all ×7 and ×9 facts without counting.",
+  videos:[ {t:"Khan Academy — 7 & 9 Times Tables", u:khan("multiply by 7 and 9")}, {t:"YouTube — ×9 Finger Trick", u:yt("times 9 finger trick")} ],
+  flash: [["7×6","42"],["7×7","49"],["7×8","56"],["7×9","63"],["9×3","27"],["9×5","45"],["9×7","63"],["9×8","72"],["9×9","81"],["7×4","28"]],
+  quiz:[
+    {q:"7 × 6 =", opts:["42","48","36","49"], a:"42"},
+    {q:"7 × 7 =", opts:["47","49","56","42"], a:"49"},
+    {q:"7 × 8 =", opts:["54","56","64","49"], a:"56"},
+    {q:"7 × 9 =", opts:["61","63","72","56"], a:"63"},
+    {q:"9 × 8 =", opts:["81","72","64","70"], a:"72"},
+  ]
+},
+{
+  id:5, subject:"mult", title:"Multiplication Mastery Check", timed:true, drillFact:"mult",
+  lesson:[
+    "Today is a timed check — this is how you prove the facts have actually stuck.",
+    "Target: 80% or better on 50 mixed multiplication facts.",
+    "Anything you miss becomes a flashcard you review daily until it's automatic."
+  ],
+  goal:"Run the timed drill below at least twice. Beat your first score the second time.",
+  videos:[ {t:"Khan Academy — Multiplication Fluency", u:khan("multiplication fluency")} ],
+  flash: [["7×8","56"],["9×6","54"],["8×8","64"],["6×9","54"],["7×9","63"],["8×6","48"],["9×9","81"],["7×7","49"],["4×9","36"],["6×7","42"]],
+  quiz:[
+    {q:"9 × 9 =", opts:["81","72","91","89"], a:"81"},
+    {q:"7 × 9 =", opts:["56","63","72","65"], a:"63"},
+    {q:"8 × 6 =", opts:["48","54","42","64"], a:"48"},
+    {q:"6 × 9 =", opts:["45","56","54","63"], a:"54"},
+  ]
+},
+{
+  id:6, subject:"div", title:"Division Basics",
+  lesson:[
+    "Division is multiplication in reverse: 56÷8 asks “8 times what equals 56?”",
+    "Every multiplication fact secretly gives you two division facts for free.",
+    "Write the fact family: 7×8=56 → 56÷8=7 and 56÷7=8."
+  ],
+  goal:"Recognize the multiplication fact hiding inside 56÷8, 42÷6, 63÷9.",
+  videos:[ {t:"Khan Academy — Intro to Division", u:khan("intro to division")}, {t:"Math Antics — Division", u:yt("Math Antics Division")} ],
+  flash: [["56÷8","7"],["42÷6","7"],["63÷9","7"],["48÷6","8"],["72÷8","9"],["36÷4","9"],["45÷5","9"],["81÷9","9"],["64÷8","8"],["49÷7","7"]],
+  quiz:[
+    {q:"56 ÷ 8 =", opts:["6","7","8","9"], a:"7"},
+    {q:"42 ÷ 6 =", opts:["6","7","8","9"], a:"7"},
+    {q:"63 ÷ 9 =", opts:["6","7","8","9"], a:"7"},
+    {q:"48 ÷ 6 =", opts:["7","8","9","6"], a:"8"},
+  ]
+},
+{
+  id:7, subject:"div", title:"Division Fluency", timed:true, drillFact:"mixed",
+  lesson:[
+    "Now mix multiplication and division facts together, no calculator.",
+    "Speed comes from recognizing the fact family instantly, not recalculating.",
+    "If a fact takes more than 3 seconds, it goes on a flashcard tonight."
+  ],
+  goal:"72÷8, 48÷6, 56÷7, 9×8 — all without a calculator.",
+  videos:[ {t:"Khan Academy — Division Fluency", u:khan("division fluency practice")} ],
+  flash: [["72÷8","9"],["48÷6","8"],["56÷7","8"],["9×8","72"],["36÷6","6"],["54÷9","6"],["7×8","56"],["81÷9","9"],["6×9","54"],["64÷8","8"]],
+  quiz:[
+    {q:"72 ÷ 8 =", opts:["8","9","7","6"], a:"9"},
+    {q:"48 ÷ 6 =", opts:["8","7","9","6"], a:"8"},
+    {q:"56 ÷ 7 =", opts:["7","8","9","6"], a:"8"},
+    {q:"9 × 8 =", opts:["81","72","64","76"], a:"72"},
+  ]
+},
+{
+  id:8, subject:"frac", title:"Fractions, Decimals, Percents",
+  lesson:[
+    "These three are the same amount written three different ways — memorize the conversion table cold.",
+    "1/2 = 0.5 = 50%   •   1/4 = 0.25 = 25%   •   3/4 = 0.75 = 75%   •   1/10 = 0.1 = 10%",
+    "Shortcut: to turn a fraction into a percent, divide top by bottom, then move the decimal two spots right."
+  ],
+  goal:"Know the core conversions without thinking.",
+  videos:[ {t:"Khan Academy — Fractions, Decimals, Percents", u:khan("fractions decimals percents")}, {t:"YouTube — Convert Fractions to Percents Fast", u:yt("convert fractions to percents trick")} ],
+  flash: [["1/2 as %","50%"],["1/4 as %","25%"],["3/4 as %","75%"],["1/10 as %","10%"],["1/2 as decimal","0.5"],["1/4 as decimal","0.25"],["3/4 as decimal","0.75"],["1/5 as %","20%"],["1/3 as % (approx)","33%"],["2/4 simplified","1/2"]],
+  quiz:[
+    {q:"1/2 =", opts:["25%","50%","75%","10%"], a:"50%"},
+    {q:"1/4 =", opts:["25%","50%","40%","20%"], a:"25%"},
+    {q:"3/4 =", opts:["34%","43%","75%","70%"], a:"75%"},
+    {q:"1/10 =", opts:["1%","100%","10%","0.1%"], a:"10%"},
+  ]
+},
+{
+  id:9, subject:"alg", title:"Negative Numbers",
+  lesson:[
+    "Same signs multiply/divide to a positive. Different signs give a negative.",
+    "Adding a negative is the same as subtracting: 8 + (−4) = 8 − 4.",
+    "Think of a number line: negative moves left, positive moves right."
+  ],
+  goal:"Understand the sign rules: −4×3, −5+8, −7×−2",
+  videos:[ {t:"Khan Academy — Negative Numbers", u:khan("negative numbers rules")}, {t:"Math Antics — Negative Numbers", u:yt("Math Antics Negative Numbers")} ],
+  flash: [["-4×3","-12"],["-5+8","3"],["-7×-2","14"],["-6+(-3)","-9"],["10-15","-5"],["-8÷2","-4"],["-3×-3","9"],["5-9","-4"],["-2×6","-12"],["-10+4","-6"]],
+  quiz:[
+    {q:"−4 × 3 =", opts:["12","-12","7","-7"], a:"-12"},
+    {q:"−5 + 8 =", opts:["-3","3","13","-13"], a:"3"},
+    {q:"−7 × −2 =", opts:["-14","14","-9","9"], a:"14"},
+    {q:"10 − 15 =", opts:["5","-5","25","-25"], a:"-5"},
+  ]
+},
+{
+  id:10, subject:"alg", title:"Basic Algebra — One Step",
+  lesson:[
+    "The golden rule: whatever is done to x, undo it with the opposite operation.",
+    "x + 5 = 12 → subtract 5 from both sides → x = 7.",
+    "x − 7 = 4 → add 7 to both sides → x = 11.",
+    "Whatever you do to one side of the equation, you must do to the other."
+  ],
+  goal:"Solve one-step equations confidently.",
+  videos:[ {t:"Khan Academy — One-Step Equations", u:khan("one step equations")}, {t:"YouTube — Solving x+a=b", u:yt("solving one step addition subtraction equations")} ],
+  flash: [["x+5=12 → x=","7"],["x-7=4 → x=","11"],["x+9=20 → x=","11"],["x-3=8 → x=","11"],["x+6=6 → x=","0"],["x-10=0 → x=","10"],["x+2=15 → x=","13"],["x-8=-2 → x=","6"],["x+15=15 → x=","0"],["x-1=9 → x=","10"]],
+  quiz:[
+    {q:"x + 5 = 12, x =", opts:["6","7","17","5"], a:"7"},
+    {q:"x − 7 = 4, x =", opts:["11","3","-3","28"], a:"11"},
+    {q:"x + 9 = 20, x =", opts:["29","11","9","12"], a:"11"},
+    {q:"x − 3 = 8, x =", opts:["5","11","24","-5"], a:"11"},
+  ]
+},
+{
+  id:11, subject:"alg", title:"Algebra Part 2 — Multiply & Divide",
+  lesson:[
+    "3x = 18 means 3 groups of x equal 18 → divide both sides by 3 → x = 6.",
+    "x/4 = 5 means x split into 4 equal groups is 5 → multiply both sides by 4 → x = 20.",
+    "Undo multiplication with division, and undo division with multiplication."
+  ],
+  goal:"Understand multiplication and division equations.",
+  videos:[ {t:"Khan Academy — Multiplication & Division Equations", u:khan("one step multiplication division equations")}, {t:"YouTube — Solving 3x=18 style", u:yt("solving equations multiply divide both sides")} ],
+  flash: [["3x=18 → x=","6"],["x/4=5 → x=","20"],["5x=45 → x=","9"],["x/3=6 → x=","18"],["7x=21 → x=","3"],["x/2=9 → x=","18"],["4x=32 → x=","8"],["x/5=4 → x=","20"],["6x=48 → x=","8"],["x/6=2 → x=","12"]],
+  quiz:[
+    {q:"3x = 18, x =", opts:["6","15","21","54"], a:"6"},
+    {q:"x/4 = 5, x =", opts:["1.25","9","20","4"], a:"20"},
+    {q:"5x = 45, x =", opts:["9","40","50","225"], a:"9"},
+    {q:"x/3 = 6, x =", opts:["2","9","18","3"], a:"18"},
+  ]
+},
+{
+  id:12, subject:"frac", title:"Percentages in the Real World",
+  lesson:[
+    "10% of a number: just move the decimal point one place left.",
+    "50% of a number: cut it in half.",
+    "25% of a number: cut it in half, then in half again."
+  ],
+  goal:"10% of 80, 25% of 60, 50% of 36",
+  videos:[ {t:"Khan Academy — Percent Word Problems", u:khan("percent word problems")}, {t:"YouTube — Mental Math Percent Tricks", u:yt("mental math percent tricks")} ],
+  flash: [["10% of 80","8"],["25% of 60","15"],["50% of 36","18"],["10% of 250","25"],["50% of 90","45"],["25% of 200","50"],["10% of 45","4.5"],["20% of 50","10"],["75% of 40","30"],["50% of 15","7.5"]],
+  quiz:[
+    {q:"10% of 80 =", opts:["8","18","80","0.8"], a:"8"},
+    {q:"25% of 60 =", opts:["25","15","30","6"], a:"15"},
+    {q:"50% of 36 =", opts:["18","36","3.6","6"], a:"18"},
+    {q:"20% of 50 =", opts:["5","10","20","25"], a:"10"},
+  ]
+},
+{
+  id:13, subject:"alg", title:"Mixed Review Day",
+  lesson:[
+    "Today has no new lessons — it's about finding your weak spots before the final test.",
+    "Work through a mix of every topic so far: multiplication, division, fractions, algebra.",
+    "Any problem you miss becomes tonight's flashcard — don't skip the review."
+  ],
+  goal:"Identify weaknesses across all four skill areas.",
+  videos:[ {t:"Khan Academy — Grade 8 Foundations Review", u:khan("8th grade math review")} ],
+  flash: [["8×7","56"],["63÷9","7"],["1/4 as %","25%"],["x+9=15 → x=","6"],["9×6","54"],["72÷8","9"],["3/4 as decimal","0.75"],["4x=24 → x=","6"],["-6+9","3"],["50% of 22","11"]],
+  quiz:[
+    {q:"8 × 7 =", opts:["54","56","64","49"], a:"56"},
+    {q:"63 ÷ 9 =", opts:["6","7","8","9"], a:"7"},
+    {q:"1/4 as a percent =", opts:["14%","25%","40%","4%"], a:"25%"},
+    {q:"x + 9 = 15, x =", opts:["24","6","5","9"], a:"6"},
+    {q:"4x = 24, x =", opts:["4","6","8","20"], a:"6"},
+  ]
+},
+{
+  id:14, subject:"alg", title:"Freshman Readiness Test", timed:true, drillFact:"mixed",
+  lesson:[
+    "This is the finish line — a clean, no-calculator check across every skill.",
+    "Target score: 8 out of 10 or higher.",
+    "Whatever you miss today, keep drilling for one more week using the flashcards — don't let it fade before day one of Algebra 1."
+  ],
+  goal:"Score 8/10 or better without a calculator.",
+  videos:[ {t:"Khan Academy — Algebra 1 Readiness", u:khan("algebra 1 readiness check")} ],
+  flash: [["7×8","56"],["9×6","54"],["8×8","64"],["56÷8","7"],["72÷9","8"],["48÷6","8"],["1/2 as %","50%"],["3/4 as %","75%"],["x+9=15 → x=","6"],["4x=24 → x=","6"]],
+  quiz:[
+    {q:"7 × 8 =", opts:["54","56","64","49"], a:"56"},
+    {q:"9 × 6 =", opts:["45","54","63","56"], a:"54"},
+    {q:"8 × 8 =", opts:["56","64","72","81"], a:"64"},
+    {q:"56 ÷ 8 =", opts:["6","7","8","9"], a:"7"},
+    {q:"72 ÷ 9 =", opts:["7","8","9","6"], a:"8"},
+    {q:"48 ÷ 6 =", opts:["6","7","8","9"], a:"8"},
+    {q:"1/2 as a percent =", opts:["25%","50%","75%","12%"], a:"50%"},
+    {q:"3/4 as a percent =", opts:["34%","43%","75%","30%"], a:"75%"},
+    {q:"x + 9 = 15, x =", opts:["24","6","5","9"], a:"6"},
+    {q:"4x = 24, x =", opts:["4","6","8","20"], a:"6"},
+  ]
+},
+];
+
+/* ================= STATE + STORAGE ================= */
+
+let progress = {
+  completedDays: {},          // {1:true, 2:true...}
+  quizScores: {},             // {1: {score:4,total:5}, ...}
+  flashKnown: {},              // {"1-0":true, ...} key = dayId-cardIndex
+};
+let currentView = "dash";     // "dash" or day id
+let storageReady = false;
+
+async function loadProgress(){
+  try{
+    const r = await window.storage.get('shiah-math-progress', false);
+    if(r && r.value){ progress = JSON.parse(r.value); }
+  }catch(e){ /* no saved progress yet */ }
+  storageReady = true;
+  render();
+}
+async function saveProgress(){
+  try{ await window.storage.set('shiah-math-progress', JSON.stringify(progress), false); }
+  catch(e){ console.error('save failed', e); }
+}
+
+/* ================= HELPERS ================= */
+
+function skillStats(){
+  const stats = {};
+  Object.keys(SUBJECTS).forEach(k => stats[k] = {correct:0, total:0});
+  DAYS.forEach(d=>{
+    const sc = progress.quizScores[d.id];
+    if(sc){ stats[d.subject].correct += sc.score; stats[d.subject].total += sc.total; }
+  });
+  return stats;
+}
+function overallPct(){
+  const done = Object.keys(progress.completedDays).length;
+  return Math.round((done/14)*100);
+}
+function streakCount(){
+  let s=0;
+  for(let i=1;i<=14;i++){ if(progress.completedDays[i]) s++; else break; }
+  return s;
+}
+
+/* ================= RENDER: DASHBOARD ================= */
+
+function renderWheel(pct, size){
+  const r = size/2 - 10;
+  const c = 2*Math.PI*r;
+  const off = c - (pct/100)*c;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" stroke="var(--ring-track)" stroke-width="12" fill="none"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" stroke="var(--success)" stroke-width="12" fill="none"
+      stroke-dasharray="${c}" stroke-dashoffset="${off}" stroke-linecap="round"
+      transform="rotate(-90 ${size/2} ${size/2})" style="transition:stroke-dashoffset .6s ease"/>
+  </svg>`;
+}
+
+function renderDashboard(){
+  const stats = skillStats();
+  const pct = overallPct();
+  const streak = streakCount();
+  const done = Object.keys(progress.completedDays).length;
+
+  const skillBars = Object.keys(SUBJECTS).map(k=>{
+    const s = stats[k];
+    const p = s.total ? Math.round((s.correct/s.total)*100) : 0;
+    return `<div class="skill-row">
+      <div class="skill-name"><span>${SUBJECTS[k].name}</span><span class="mono">${p}%</span></div>
+      <div class="skill-track"><div class="skill-fill" style="width:${p}%;background:${SUBJECTS[k].solid}"></div></div>
+    </div>`;
+  }).join("");
+
+  return `
+  <div class="hero">
+    <div class="wheel-box">
+      ${renderWheel(pct,150)}
+      <div class="wheel-center"><div class="num">${pct}%</div><div class="lbl">Reset<br>Complete</div></div>
+    </div>
+    <div class="hero-text">
+      <div class="eyebrow">14-Day Freshman Math Reset</div>
+      <h1>Hey Shiah — let's get Pinnacle-ready 💪</h1>
+      <p>20–30 focused minutes a day on multiplication, division, fractions/percents, and basic algebra — the exact skills Algebra 1 builds on. The 80/20 rule: a handful of number facts and rules unlock most of what you'll need freshman year.</p>
+      <div class="streak-pill">🔥 ${streak}-day streak &nbsp;•&nbsp; ${done}/14 days done</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Skill Mastery</h2>
+    ${skillBars}
+  </div>
+
+  <div class="card">
+    <h2>Daily Success Formula</h2>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-num">10m</div><div class="stat-lbl">Flashcards</div></div>
+      <div class="stat-card"><div class="stat-num">10m</div><div class="stat-lbl">New Lesson</div></div>
+      <div class="stat-card"><div class="stat-num">10m</div><div class="stat-lbl">Practice</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Quick Drill 🎲</h2>
+    <p style="color:var(--muted);font-size:14px;margin:6px 0 12px;">Feeling ready? Jump into a random 60-second mixed-facts drill — no need to wait for the right day.</p>
+    <button class="btn" onclick="startQuickDrill()">Start Quick Drill</button>
+  </div>
+
+  <div id="drillArea"></div>
+  `;
+}
+
+/* ================= RENDER: DAY VIEW ================= */
+
+let flashState = {}; // per render: {index, flipped}
+let quizState = {};  // {answered:{}, correctCount}
+
+function renderDay(day){
+  const sub = SUBJECTS[day.subject];
+  const isDone = !!progress.completedDays[day.id];
+  const idx = DAYS.findIndex(d=>d.id===day.id);
+  const prevDay = idx>0 ? DAYS[idx-1] : null;
+  const nextDay = idx<DAYS.length-1 ? DAYS[idx+1] : null;
+
+  flashState = flashState.dayId===day.id ? flashState : {dayId:day.id, index:0, flipped:false};
+  quizState = quizState.dayId===day.id ? quizState : {dayId:day.id, answered:{}, correctCount:0};
+
+  const videoBtns = day.videos.map(v=>`
+    <a class="video-btn" href="${v.u}" target="_blank" rel="noopener">
+      <span class="play">▶</span>${v.t}
+    </a>`).join("");
+
+  const goalBits = day.goal;
+
+  return `
+  <div class="card">
+    <span class="day-tag" style="background:${sub.solid}22;color:${sub.solid}">Day ${day.id} · ${sub.name}</span>
+    <h2>${day.title}</h2>
+
+    <div class="section-label">📘 Learn</div>
+    <ul class="lesson-list">${day.lesson.map(l=>`<li>${l}</li>`).join("")}</ul>
+    <div class="goal-box"><b>Goal:</b> ${goalBits}</div>
+
+    <div class="section-label">🎬 Watch</div>
+    <div class="video-row">${videoBtns}</div>
+
+    <div class="section-label">🃏 Flashcards</div>
+    <div id="flashHost"></div>
+
+    ${day.timed ? `
+    <div class="section-label">⏱ Timed Drill</div>
+    <div id="timedDrillHost"></div>
+    ` : ``}
+
+    <div class="section-label">✅ Quiz — instant feedback</div>
+    <div id="quizHost"></div>
+
+    <div class="complete-row">
+      <div class="day-nav-btns">
+        ${prevDay ? `<button class="btn secondary" onclick="goToDay(${prevDay.id})">← Day ${prevDay.id}</button>` : `<button class="btn secondary" onclick="goDash()">← Dashboard</button>`}
+        ${nextDay ? `<button class="btn secondary" onclick="goToDay(${nextDay.id})">Day ${nextDay.id} →</button>` : ``}
+      </div>
+      <button class="complete-btn ${isDone?'done':''}" onclick="toggleComplete(${day.id})">
+        ${isDone ? '✓ Day Complete' : 'Mark Day Complete'}
+      </button>
+    </div>
+  </div>
+  `;
+}
+
+function renderFlashcards(day){
+  const st = flashState;
+  const total = day.flash.length;
+  const [front, back] = day.flash[st.index];
+  const key = day.id+"-"+st.index;
+  const known = !!progress.flashKnown[key];
+
+  document.getElementById('flashHost').innerHTML = `
+    <div class="flash-wrap">
+      <div class="flash-card ${st.flipped?'flipped':''}" id="flashCardEl">
+        <div class="flash-inner">
+          <div class="flash-face flash-front">${front}</div>
+          <div class="flash-face flash-back">${back}</div>
+        </div>
+      </div>
+      <div class="flash-progress">Card ${st.index+1} / ${total} ${known?'· ⭐ known':''}</div>
+      <div class="flash-controls">
+        <button class="icon-btn" onclick="flashPrev()">‹</button>
+        <button class="icon-btn" onclick="flashShuffle()">🔀</button>
+        <button class="icon-btn" onclick="flashNext()">›</button>
+      </div>
+      <div class="rate-row">
+        <button class="rate-btn rate-again" onclick="rateFlash(false)">Still learning</button>
+        <button class="rate-btn rate-good" onclick="rateFlash(true)">Got it!</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('flashCardEl').onclick = () => {
+    flashState.flipped = !flashState.flipped;
+    renderFlashcards(day);
+  };
+}
+function flashNext(){ const day=currentDayObj(); flashState.index=(flashState.index+1)%day.flash.length; flashState.flipped=false; renderFlashcards(day); }
+function flashPrev(){ const day=currentDayObj(); flashState.index=(flashState.index-1+day.flash.length)%day.flash.length; flashState.flipped=false; renderFlashcards(day); }
+function flashShuffle(){ const day=currentDayObj(); flashState.index=Math.floor(Math.random()*day.flash.length); flashState.flipped=false; renderFlashcards(day); }
+function rateFlash(good){
+  const day=currentDayObj();
+  const key = day.id+"-"+flashState.index;
+  progress.flashKnown[key] = good;
+  saveProgress();
+  flashNext();
+}
+
+function renderQuiz(day){
+  const st = quizState;
+  const blocks = day.quiz.map((q,i)=>{
+    const ans = st.answered[i];
+    const opts = q.opts.map(o=>{
+      let cls = 'opt-btn';
+      if(ans){
+        cls += ' disabled';
+        if(o===q.a) cls += ' correct';
+        else if(o===ans && ans!==q.a) cls += ' wrong';
+      }
+      return `<button class="${cls}" onclick="answerQuiz(${i}, '${o.replace(/'/g,"\\'")}')">${o}</button>`;
+    }).join("");
+    return `<div class="q-block">
+      <div class="q-text">${i+1}. ${q.q}</div>
+      <div class="opt-row">${opts}</div>
+    </div>`;
+  }).join("");
+
+  const answeredCount = Object.keys(st.answered).length;
+  const total = day.quiz.length;
+  let scoreHtml = "";
+  if(answeredCount===total){
+    const pct = Math.round((st.correctCount/total)*100);
+    const good = pct>=80;
+    scoreHtml = `<div class="quiz-score" style="background:${good?'#163a2b':'#3a1616'};color:${good?'var(--success)':'var(--danger)'}">
+      Score: ${st.correctCount}/${total} (${pct}%) ${good ? '— nice work! 🎉' : '— review the flashcards above and try again tomorrow.'}
+    </div>
+    <button class="btn secondary" style="margin-top:10px" onclick="retryQuiz()">Retry Quiz</button>`;
+  }
+
+  document.getElementById('quizHost').innerHTML = blocks + scoreHtml;
+}
+function answerQuiz(i, val){
+  const day = currentDayObj();
+  if(quizState.answered[i]) return;
+  quizState.answered[i] = val;
+  if(val === day.quiz[i].a) quizState.correctCount++;
+  renderQuiz(day);
+  if(Object.keys(quizState.answered).length === day.quiz.length){
+    progress.quizScores[day.id] = {score:quizState.correctCount, total:day.quiz.length};
+    saveProgress();
+    setTimeout(()=>render(), 50);
+  }
+}
+function retryQuiz(){
+  quizState = {dayId:currentDayObj().id, answered:{}, correctCount:0};
+  renderQuiz(currentDayObj());
+}
+
+/* ================= TIMED DRILL ================= */
+
+let drillTimer = null;
+let drillState = null;
+
+function buildDrillPool(mode){
+  const facts = [];
+  for(let a=2;a<=9;a++){ for(let b=2;b<=9;b++){
+    facts.push({q:`${a} × ${b}`, a: a*b});
+    if(mode==="mixed") facts.push({q:`${a*b} ÷ ${a}`, a:b});
+  }}
+  return facts;
+}
+function startDrill(mode, seconds){
+  const pool = buildDrillPool(mode);
+  drillState = { pool, seconds, timeLeft:seconds, correct:0, wrong:0, current:null, running:true };
+  nextDrillQ();
+  renderDrillUI();
+  drillTimer = setInterval(()=>{
+    drillState.timeLeft--;
+    if(drillState.timeLeft<=0){ endDrill(); }
+    else { updateDrillTimerDisplay(); }
+  },1000);
+}
+function nextDrillQ(){
+  const p = drillState.pool;
+  drillState.current = p[Math.floor(Math.random()*p.length)];
+}
+function renderDrillUI(){
+  const host = document.getElementById(document.getElementById('timedDrillHost') ? 'timedDrillHost' : 'drillArea');
+  if(!host) return;
+  host.innerHTML = `
+    <div class="card" style="background:var(--bg-card-2)">
+      <div class="timer-bar">
+        <div class="timer-display mono" id="timerDisp">${drillState.timeLeft}s</div>
+        <div class="mono">✅ ${drillState.correct} &nbsp; ❌ ${drillState.wrong}</div>
+        <button class="btn secondary" onclick="endDrill()">Stop</button>
+      </div>
+      <div class="drill-q">${drillState.current.q} = ?</div>
+      <input class="drill-input" id="drillInput" type="number" autofocus />
+      <div class="drill-feedback" id="drillFeedback"></div>
+    </div>
+  `;
+  const inp = document.getElementById('drillInput');
+  inp.focus();
+  inp.addEventListener('keydown', e=>{
+    if(e.key==='Enter'){ checkDrillAnswer(); }
+  });
+}
+function checkDrillAnswer(){
+  if(!drillState || !drillState.running) return;
+  const inp = document.getElementById('drillInput');
+  const val = parseFloat(inp.value);
+  const fb = document.getElementById('drillFeedback');
+  if(val === drillState.current.a){
+    drillState.correct++;
+    fb.textContent = "✓ Correct!";
+    fb.style.color = "var(--success)";
+  } else {
+    drillState.wrong++;
+    fb.textContent = `✗ Answer: ${drillState.current.a}`;
+    fb.style.color = "var(--danger)";
+  }
+  nextDrillQ();
+  renderDrillUI();
+}
+function updateDrillTimerDisplay(){
+  const el = document.getElementById('timerDisp');
+  if(el) el.textContent = drillState.timeLeft+"s";
+}
+function endDrill(){
+  clearInterval(drillTimer);
+  if(!drillState) return;
+  drillState.running = false;
+  const total = drillState.correct + drillState.wrong;
+  const pct = total ? Math.round((drillState.correct/total)*100) : 0;
+  const host = document.getElementById('timedDrillHost') ? document.getElementById('timedDrillHost') : document.getElementById('drillArea');
+  host.innerHTML = `
+    <div class="card" style="background:var(--bg-card-2);text-align:center">
+      <h2>Drill Complete</h2>
+      <div class="quiz-score" style="background:${pct>=80?'#163a2b':'#3a1616'};color:${pct>=80?'var(--success)':'var(--danger)'}">
+        ${drillState.correct} correct / ${drillState.wrong} wrong — ${pct}% accuracy
+      </div>
+      <button class="btn" style="margin-top:14px" onclick="startDrill('${drillState.pool.length>81?'mixed':'mult'}', ${drillState.seconds})">Run Again</button>
+    </div>
+  `;
+}
+
+function startTimedDrillForDay(day){
+  const mode = day.drillFact === "mixed" ? "mixed" : "mult";
+  document.getElementById('timedDrillHost').innerHTML = `
+    <div class="card" style="background:var(--bg-card-2);text-align:center">
+      <p style="color:var(--muted);margin-top:0">60-second mixed facts sprint. Type the answer and hit Enter.</p>
+      <button class="btn" onclick="startDrill('${mode}',60)">Start 60-Second Drill</button>
+    </div>
+  `;
+}
+function startQuickDrill(){
+  document.getElementById('drillArea').innerHTML = `<div id="timedDrillHostAlias"></div>`;
+  // reuse same rendering path by faking the host id temporarily
+  const fakeHost = document.createElement('div');
+  fakeHost.id = 'timedDrillHost';
+  document.getElementById('drillArea').innerHTML = '';
+  document.getElementById('drillArea').appendChild(fakeHost);
+  startDrill('mixed', 60);
+}
+
+/* ================= NAV / ROUTER ================= */
+
+function currentDayObj(){ return DAYS.find(d=>d.id===currentView); }
+
+function goToDay(id){ currentView = id; render(); window.scrollTo({top:0, behavior:'smooth'}); }
+function goDash(){ currentView = "dash"; render(); window.scrollTo({top:0, behavior:'smooth'}); }
+function toggleComplete(id){
+  if(progress.completedDays[id]) delete progress.completedDays[id];
+  else progress.completedDays[id] = true;
+  saveProgress();
+  render();
+}
+
+function renderNav(){
+  const chips = [`<div class="chip dash ${currentView==='dash'?'active':''}" onclick="goDash()">🏠 Dashboard</div>`]
+    .concat(DAYS.map(d=>{
+      const done = progress.completedDays[d.id];
+      return `<div class="chip ${currentView===d.id?'active':''}" onclick="goToDay(${d.id})">
+        Day ${d.id} ${done?'<span class="check">✓</span>':''}
+      </div>`;
+    }));
+  return `<div class="nav-row">${chips.join("")}</div>`;
+}
+
+function render(){
+  if(!storageReady){
+    document.getElementById('app').innerHTML = `<div style="padding:60px;text-align:center;color:var(--muted)">Loading your progress...</div>`;
+    return;
+  }
+  const app = document.getElementById('app');
+  let body;
+  if(currentView === "dash"){
+    body = renderDashboard();
+  } else {
+    const day = currentDayObj();
+    body = renderDay(day);
+  }
+  app.innerHTML = renderNav() + body;
+
+  if(currentView !== "dash"){
+    const day = currentDayObj();
+    renderFlashcards(day);
+    renderQuiz(day);
+    if(day.timed){ startTimedDrillForDay(day); }
+  }
+
+  app.innerHTML += `<div class="footer-note">Built for Shiah · Pinnacle High School freshman prep · Progress saves automatically as you go.</div>`;
+}
+
+loadProgress();
+</script>
+</body>
+</html>
